@@ -24,8 +24,8 @@ func (m model) View() string {
 	}
 
 	if m.state == bodyView {
-		s += "Note:\n\n"
-		s += m.textinput.View() + "\n\n"
+		s += "Note: " + m.currNote.Title + "\n\n"
+		s += m.textarea.View() + "\n\n"
 		s += faintStyle.Render("ctrl+s - save, esq - discard")
 	}
 
@@ -41,7 +41,7 @@ func (m model) View() string {
 			}
 			s += enumeratorStyle.Render(prefix) + n.Title + " | " + faintStyle.Render(shortBody) + "\n\n"
 		}
-		s += faintStyle.Render("n - new note, q - quit, up/down/j/k to navigate, enter to edit") + "\n"
+		s += faintStyle.Render("n - new note, d - delete note, q - quit, up/down/j/k to navigate, enter to edit") + "\n"
 	}
 
 	return s

@@ -70,3 +70,9 @@ func (s *Store) SaveNote(note Note) error {
 	}
 	return nil
 }
+
+func (s *Store) DeleteNote(id int64) error {
+	deleteQuery := `DELETE FROM notes WHERE id = ?`
+	_, err := s.conn.Exec(deleteQuery, id)
+	return err
+}

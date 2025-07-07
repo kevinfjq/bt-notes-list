@@ -79,6 +79,35 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.textarea.Focus()
 				m.textarea.CursorEnd()
 				m.state = bodyView
+			case "d":
+				if len(m.notes) == 0 {
+					return m, nil
+				}
+				noteToDelete := m.notes[m.listIndex]
+				var err error
+				if err = m.store.DeleteNote(noteToDelete.ID); err != nil {
+					return m, tea.Quit
+				}
+				m.listIndex = m.listIndex - 1
+				m.notes, err = m.store.GetNotes()
+				if err != nil {
+					return m, tea.Quit
+				}
+				if m.listIndex >= len(m.notes) {
+					m.listIndex = len(m.notes) - 1
+				}
+				if m.listIndex < 0 {
+					m.listIndex = 0
+				}
+				if len(m.notes) == 0 {
+					m.currNote = Note{}
+					m.state = listView
+				} else {
+					m.currNote = m.notes[m.listIndex]
+					m.textarea.SetValue(m.currNote.Body)
+					m.textarea.Focus()
+					m.textarea.CursorEnd()
+				}
 			}
 		case titleView:
 			switch key {
